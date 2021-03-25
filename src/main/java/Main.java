@@ -84,7 +84,55 @@ public class Main {
         }
     }
 
+    public static double getPromedio(){
+        double promedio = 0.00;
+        int llargariaBits;
+        double proba;
+        String[] allKeys = input.keySet().toArray(new String[0]);
 
+        for(int i = 0; i< input.size();i++){
+            llargariaBits = tree.parseBinary(tree.root, allKeys[i]).length();
+            proba = input.get(allKeys[i])/100;
+            promedio += llargariaBits*proba;
+
+        }
+
+        return promedio;
+    }
+
+    public static double getEntropy(){
+        double entropy = 0.0;
+        double proba;
+        String[] allKeys = input.keySet().toArray(new String[0]);
+
+        for (int i = 1; i < input.size(); i++) {
+            proba = input.get(allKeys[i])/100;
+            entropy -= (proba * (log2(proba)));
+        }
+
+        return entropy;
+    }
+
+
+    public static double log2(double N){
+
+        double result = (Math.log(N) / Math.log(2));
+
+        return result;
+    }
+
+    public static int lenMaxBinary(){
+        String[] allKeys = input.keySet().toArray(new String[0]);
+        int tmp, tmp2 = 0, indexLlarg = 0;
+
+        for (int i = 0; i<input.size(); i++){
+            tmp = tree.parseBinary(tree.root, allKeys[i]).length();
+            if(tmp > tmp2){
+                tmp2 = tmp;
+            }
+        }
+        return tmp2;
+    }
 
     /**
      *
@@ -97,8 +145,12 @@ public class Main {
         String[] allKeys = input.keySet().toArray(new String[0]);
         tree = new BST(100, String.join("", allKeys));
         sortAndMerge(input, tree);
-        System.out.println(tree.parseBinary(tree.root, "9"));
+        double promedio = getPromedio();
+        System.out.println("El promitg és: " + promedio);
+        System.out.println("L'entropía és: " + getEntropy());
+        System.out.println("El factor de compressió és: " + (lenMaxBinary()/promedio) + ":1");
         System.out.println("finish");
+
     }
 
 }
